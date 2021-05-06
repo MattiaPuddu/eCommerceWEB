@@ -13,13 +13,16 @@ namespace eCommerceWEB
     public partial class Carrello : System.Web.UI.Page
     {
         public Utente Utente { get; set; }
-        public List<Prodotto> Prodotti { get; set; }
+        public static List<Prodotto> Prodotti { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             Utente = Session["Utente"] as Utente;
-            Prodotti = FileManager.GetProdotti();
-            RefreshDdls();
-            RefreshLbx();
+            if (!IsPostBack)
+            {
+                Prodotti = FileManager.GetProdotti();
+                RefreshDdls();
+                RefreshLbx();
+            }
         }
         protected void btn_add_Click(object sender, EventArgs e)
         {
@@ -60,7 +63,7 @@ namespace eCommerceWEB
         {
             Session.Clear();
             FileManager.SaveUser(Utente);
-            Response.Redirect("/Login.aspx");
+            Response.Redirect("Default.aspx");
         }
         public ProdottoNelCarrello GetProdotto()
         {
